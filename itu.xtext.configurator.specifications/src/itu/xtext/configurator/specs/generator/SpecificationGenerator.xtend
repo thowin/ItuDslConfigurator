@@ -12,6 +12,7 @@ import itu.xtext.configurator.specs.specification.Title
 import itu.xtext.configurator.specs.specification.Specification
 import itu.xtext.configurator.specs.specification.Type
 import itu.xtext.configurator.specs.specification.Typelist
+import itu.xtext.configurator.specs.specification.Constraint
 
 /**
  * Generates code from your model files on save.
@@ -33,8 +34,43 @@ class SpecificationGenerator extends AbstractGenerator {
                 'spec.html',
                 e.compileHT)
         }
+		        for (e : resource.allContents.toIterable.filter(Configurator)) {
+            fsa.generateFile(
+                'spec.json',
+                e.compileJS)
+        }
+
 
 	}
+
+	 def compileJS(Configurator c) '''{
+"ConfigTitle": "«c.title.name»",
+"options": [
+«FOR f : c.specs»
+«f.compileJS»
+«ENDFOR»
+],
+"constraints":{
+«FOR f : c.constraint»
+"«f.specif.entity.name»" : [],
+«ENDFOR»
+}
+}
+'''
+	def compileJS(Specification s)'''{
+"name": "«s.entity.name»",
+"type": "«if (s.opt == 'opt')'multiSelect'else'singleSelect'»",
+"values": [«s.typelist.compileJS»]
+},'''
+
+	def compileJS(Typelist tl)'''"«tl.type.name»"«FOR f : tl.t», "«f.name»"«ENDFOR»'''  
+
+	def compileJS(Constraint s)'''{
+"name": "«s.specif.entity.name»",
+"type": "«if (s.specif.opt == 'opt')'multiSelect'else'singleSelect'»",
+"values": [«s.specif.typelist.compileJS»]
+},'''
+
 	
 	 def compile(Configurator c) '''#specifikation
 ##«c.title.name»
