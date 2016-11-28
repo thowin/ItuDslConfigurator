@@ -1,0 +1,66 @@
+grammar itu.xtext.configurator.specs.Specification with org.eclipse.xtext.common.Terminals
+
+generate specification "http://www.xtext.itu/configurator/specs/Specification"
+
+Model:
+	configurator += Configurator;
+	
+Configurator:
+	title=Title (specs+=Specification)+ (constraint+=Constraint)*
+;	
+
+Title:
+	name=ID
+;
+
+Specification:
+	entity=Entity (opt=Optional)? typelist=Typelist 
+;
+
+Constraint:
+	specif=Specification exp=Exp specif2=Specification
+;
+
+Typelist:
+	type=Type (sp+=Sp t+=Type)*
+;
+
+Sp:
+	','
+;
+
+Optional:
+	'opt'
+;
+
+Entity:
+	name=ID
+;
+
+Type:
+	name=ID
+;
+
+NL:
+	'\n'
+;
+
+Exp:
+	binop=Binop | unary=Unary | name=ID
+;
+
+Binexp:
+	Exp Binop exp+=Exp
+;
+
+Binop:
+	'and' | 'or' | 'equals' | 'requires'
+;
+
+Unary:
+	unop=Unop exp+=Exp
+;
+
+Unop:
+	'not'
+;

@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: itu.xtext.configurator.specifications.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: itu.xtext.configurator.specifications.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: itu.xtext.configurator.specifications,
+ itu.xtext.configurator.specifications.ide,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors;bundle-version="3.5.0",
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtend.lib;resolution:=optional,
+ org.eclipse.xtext.xbase.lib
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: itu.xtext.configurator.specifications.ui.internal,
+ itu.xtext.configurator.specs.ui.quickfix,
+ itu.xtext.configurator.specs.ui.contentassist
+Bundle-Activator: itu.xtext.configurator.specifications.ui.internal.SpecificationsActivator
