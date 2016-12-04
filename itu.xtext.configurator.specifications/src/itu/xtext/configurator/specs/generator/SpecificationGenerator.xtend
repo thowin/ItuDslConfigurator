@@ -7,12 +7,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import itu.xtext.configurator.specs.specification.Configurator
-import itu.xtext.configurator.specs.specification.Title
-import itu.xtext.configurator.specs.specification.Specification
-import itu.xtext.configurator.specs.specification.Type
-import itu.xtext.configurator.specs.specification.Typelist
-import itu.xtext.configurator.specs.specification.Constraint
+
 
 /**
  * Generates code from your model files on save.
@@ -23,128 +18,6 @@ class SpecificationGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 
-		for (e : resource.allContents.toIterable.filter(Configurator)) {
-            fsa.generateFile(
-                'spec.md',
-                e.compile)
-        }
-        
-        for (e : resource.allContents.toIterable.filter(Configurator)) {
-            fsa.generateFile(
-                'spec.html',
-                e.compileHT)
-        }
-		        for (e : resource.allContents.toIterable.filter(Configurator)) {
-            fsa.generateFile(
-                'spec.json',
-                e.compileJS)
-        }
-
-
 	}
-
-	 def compileJS(Configurator c) '''{
-"ConfigTitle": "«c.title.name»",
-"options": [
-«FOR f : c.specs»
-«f.compileJS»
-«ENDFOR»
-],
-"constraints":{
-«FOR f : c.constraint»
-"«f.specif.entity.name»" : [],
-«ENDFOR»
-}
-}
-'''
-	def compileJS(Specification s)'''{
-"name": "«s.entity.name»",
-"type": "«if (s.opt == 'opt')'multiSelect'else'singleSelect'»",
-"values": [«s.typelist.compileJS»]
-},'''
-
-	def compileJS(Typelist tl)'''"«tl.type.name»"«FOR f : tl.t», "«f.name»"«ENDFOR»'''  
-
-	def compileJS(Constraint s)'''{
-"name": "«s.specif.entity.name»",
-"type": "«if (s.specif.opt == 'opt')'multiSelect'else'singleSelect'»",
-"values": [«s.specif.typelist.compileJS»]
-},'''
-
 	
-	 def compile(Configurator c) '''#specifikation
-##«c.title.name»
-«FOR f : c.specs»
-«f.compile»
-«ENDFOR»
-'''
-	def compile(Specification s)'''
-###«s.entity.name»
-«s.typelist.compile»
-'''
-
-	def compile(Typelist tl)'''
-*«tl.type.name»	
-«FOR f : tl.t»
-*«f.name»
-«ENDFOR»
-
-'''        
-	
-	 def compileHT(Configurator c) '''«htmlHeader»
-	 <div class="page-header">
-	   <h1>specifikation <small>«c.title.name»</small></h1>
-	 </div>
-<form>
-«FOR f : c.specs»
-«f.compileHT»
-«ENDFOR»
-<button type="submit" class="btn btn-default">Submit</button>
-</form>
-«htmlFooter»
-'''
-
-	def compileHT(Specification s)'''
-	<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">
-    «s.entity.name»
-    </h3>
-  </div>
-</div>
-«s.typelist.compileHT»
-'''
-
-	def compileHT(Typelist tl)'''
-«tl.type.compileHT»
-«FOR f : tl.t»
-«f.compileHT»
-«ENDFOR»
-'''        
-
-	def compileHT(Type ty)'''
-  <div class="checkbox">
-    <label>
-      <input type="checkbox">«ty.name»
-    </label>
-  </div>
-'''
-
-def htmlHeader()'''
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Konfigurator</title>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-</head>
-'''
-
-def htmlFooter()'''
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</body></html>
-'''
 }

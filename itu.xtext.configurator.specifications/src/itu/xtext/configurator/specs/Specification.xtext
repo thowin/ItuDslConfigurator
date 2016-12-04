@@ -6,7 +6,7 @@ Model:
 	configurator += Configurator;
 	
 Configurator:
-	title=Title (specs+=Specification)+ (constraint+=Constraint)*
+	title=Title (specs+=Specification)+ 
 ;	
 
 Title:
@@ -14,52 +14,31 @@ Title:
 ;
 
 Specification:
-	entity=Entity (opt=Optional)? typelist=Typelist 
+	left=Entity (exp+=Exp right+=Specification)* | parenthesis+=Parenthesis
 ;
 
-Constraint:
-	specif=Specification exp=Exp specif2=Specification
+Parenthesis returns Specification:
+	'(' Specification ')'
 ;
-
-Typelist:
-	type=Type (sp+=Sp t+=Type)*
-;
-
 Sp:
-	','
+	','|',' WS
 ;
 
-Optional:
-	'opt'
+
+Entity returns Specification:
+	name=ID (Sp ID)*
 ;
 
-Entity:
-	name=ID
+
+Exp: 
+	Binop  | Unop
 ;
 
-Type:
-	name=ID
-;
-
-NL:
-	'\n'
-;
-
-Exp:
-	binop=Binop | unary=Unary | name=ID
-;
-
-Binexp:
-	Exp Binop exp+=Exp
-;
 
 Binop:
-	'and' | 'or' | 'equals' | 'requires'
+	'and' | 'or' | 'requires' | 'excludes' | 'multi' | 'single'
 ;
 
-Unary:
-	unop=Unop exp+=Exp
-;
 
 Unop:
 	'not'
